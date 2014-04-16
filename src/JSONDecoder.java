@@ -6,6 +6,7 @@ public class JSONDecoder
   // Constructor
   public JSONDecoder(String stringIn)
   {
+    System.out.println ("Init!");
     this.i = 0;
     this.jsonString = stringIn;
     if (curCharInc() != '{')
@@ -76,8 +77,11 @@ public class JSONDecoder
         case '7':
         case '8':
         case '9':
-        case '-': // negative numbers
-          return parseNumber();
+
+
+        case '-': // for negative numbers
+          return parseNumber ();
+
           // If it's a string
         case '"':
           System.out.println("About to parse String");
@@ -91,13 +95,16 @@ public class JSONDecoder
           return parseObject();
           // True
         case 't': // has to be true
-          return parseTrue();
-          // False
-        case 'f': // has to be false
-          return parseFalse();
+        case 'f': // has to be false 
+          return parseBool ();
           // Null
         case 'n': // has to be null
           return parseNull();
+
+
+        default:
+          // throw some exception
+
       }
 
     return null;
@@ -145,6 +152,7 @@ public class JSONDecoder
     return object;
   } // parseObject
 
+
   public JSONObject parseTrue()
   {
     // STUB
@@ -159,11 +167,12 @@ public class JSONDecoder
   } // parseFalse()
 
   public JSONObject parseNull()
-  {
-    // STUB
-    return null;
 
-  } // parseNull()
+  public JSONBoolean
+    parseBool ()
+  {
+    return new JSONBoolean (curCharInc ());
+  } // parseSpecial
 
   public JSONString parseString()
   {
@@ -201,7 +210,7 @@ public class JSONDecoder
             if ((ch = curCharInc()) == '"')
               {
                 endIndex++;
-                ;
+
               } // if
           } // if
         else

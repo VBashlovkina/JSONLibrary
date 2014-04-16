@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class JSONArray
-    extends
+    implements
       JSONVal
 {
   // Make an arraylist of JSONVals
