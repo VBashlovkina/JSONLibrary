@@ -8,6 +8,10 @@ public class JSONDecoder
   {
     this.i = 0;
     this.jsonString = stringIn;
+    if (curCharInc () != '{')
+      {
+        System.out.println ("Malformed error?");
+      }
 
   } // JSONDecoder ()
 
@@ -50,13 +54,13 @@ public class JSONDecoder
     parseVal ()
   {
     // Values are always preceeded by a colon.
-
+    System.out.println ("Parsing val, ch is " + currentChar ());
     if (curCharInc () != ':')
       {
         // Throw error.
         return null;
       } // if
-
+    System.out.println ("Made it through");
     char ch = curCharInc ();
     System.out.println ("Adding value, ch is " + ch);
 
@@ -88,6 +92,8 @@ public class JSONDecoder
           return parseArray ();
           // New object
         case '{':
+          System.out.println ("About to parse Object, current "
+                              + currentChar ());
           return parseObject ();
           // True
         case 't': // has to be true
@@ -108,8 +114,10 @@ public class JSONDecoder
   {
 
     // make sure that the first char is a {
-    if (curCharInc () != '{' || currentChar () == '}')
+    System.out.println ("Before caught, c " + currentChar ());
+    if (currentChar () == '}')
       {
+        System.out.println ("Caught null!, current " + currentChar ());
         return null;
       }
     // We have moved i once.
@@ -223,7 +231,9 @@ public class JSONDecoder
     parseKey ()
   {
     // Get the key
-    if (curCharInc () != '"')
+    char ch = curCharInc ();
+    System.out.println ("Parsing, ch is" + ch);
+    if (ch != '"')
       {
         // Throw an error. In JSON, the key has to be a string.
       } // if

@@ -11,10 +11,12 @@ public class JSONExpt
   {
     String simple = "{\"name\":\"Graeme\"}";
     String simple2 = "{\"name\":\"Graeme\",\"lastName\":\"Boy\"}";
-    JSONDecoder decoder = new JSONDecoder (simple2);
-    
+
+    String complex1 = "{\"name\":{\"first\":\"Graeme\",\"last\":\"Boy\"}}";
+    JSONDecoder decoder = new JSONDecoder (complex1);
+
     JSONObject obj = (JSONObject) decoder.jsonDecode ();
-    
+
     obj.printKeys ();
     // json.parse(test1.substring(1));
     // json.parse(test1.substring(1));
