@@ -14,7 +14,12 @@ public class JSONBoolean implements JSONVal
   public boolean
     get ()
   {
-    return isTrue;
+    return this.isTrue;
+  }
+  
+  public String toString()
+  {
+    return String.valueOf(this.isTrue);
   }
 
 } // class JSONSpecial
