@@ -25,6 +25,7 @@ public class JSONObject
     addKey (String keyIn)
   {
     this.keys.add (keyIn);
+    System.out.println("Key added");
   } // addKey (String)
 
   public void
@@ -36,6 +37,8 @@ public class JSONObject
   public void
     printKeys ()
   {
+    System.out.println ("There are " + this.keys.size () + " keys");
+
     for (int i = 0; i < this.keys.size (); i++)
       {
         System.out.println (this.keys.get (i));

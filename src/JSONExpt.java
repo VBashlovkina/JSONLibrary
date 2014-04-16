@@ -10,10 +10,12 @@ public class JSONExpt
     main (String[] args)
   {
     String simple = "{\"name\":\"Graeme\"}";
-    String simple2 = "{\"name\":\"Graeme\", \"lastName\": \"Boy\"}";
+    String simple2 = "{\"name\":\"Graeme\",\"lastName\":\"Boy\"}";
     JSONDecoder decoder = new JSONDecoder (simple2);
-
-    decoder.printKeys ();
+    
+    JSONObject obj = (JSONObject) decoder.jsonDecode ();
+    
+    obj.printKeys ();
     // json.parse(test1.substring(1));
     // json.parse(test1.substring(1));
     // paradox

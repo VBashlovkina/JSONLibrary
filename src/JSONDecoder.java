@@ -9,8 +9,13 @@ public class JSONDecoder
     this.i = 0;
     this.jsonString = stringIn;
 
-    parseObject ();
   } // JSONDecoder ()
+
+  public JSONVal
+    jsonDecode ()
+  {
+    return parseObject ();
+  }
 
   // Increments i before returning
   public char
@@ -32,6 +37,12 @@ public class JSONDecoder
     return this.jsonString.charAt (this.i);
   } // currentChar
 
+  public void
+    incChar ()
+  {
+    this.i++;
+  }
+
   /*
    * DECIPHER TYPE
    */
@@ -39,13 +50,15 @@ public class JSONDecoder
     parseVal ()
   {
     // Values are always preceeded by a colon.
+
     if (curCharInc () != ':')
       {
         // Throw error.
         return null;
       } // if
 
-    char ch = currentChar ();
+    char ch = curCharInc ();
+    System.out.println ("Adding value, ch is " + ch);
 
     /*
      * What are the basic types? According to json.org, they are:
@@ -68,6 +81,7 @@ public class JSONDecoder
           return parseNumber ();
           // If it's a string
         case '"':
+          System.out.println ("About to parse String");
           return parseString ();
           // Array
         case '[':
@@ -108,14 +122,23 @@ public class JSONDecoder
      * check for a common before we parse the key-value pair, and therefore I
      * will use a do-while loop (really!)
      */
+    char ch;
     do
       {
         // Add the key
-        object.addKey (parseKey ());
+        String k = parseKey ();
+        System.out.println ("Adding key " + k);
+        object.addKey (k);
         // Add the value
-        object.addVal (parseVal ()); // this will recurse if objects are inside
+        ch = currentChar ();
+        System.out.println ("Current char is " + ch);
+        JSONVal v = parseVal ();
+        object.addVal (v); // this will recurse if objects are inside
+        ch = curCharInc ();
+        System.out.println ("Added value, hash: " + v + ", next val: " + ch);
+
       }
-    while (curCharInc () == ',');
+    while (ch == ',');
 
     return object;
   } // parseObject
@@ -172,11 +195,13 @@ public class JSONDecoder
   {
     String stringOut = "";
     char ch;
-    while ((ch = this.jsonString.charAt (this.i++)) != '"')
+
+    while ((ch = curCharInc ()) != '"')
       {
+        System.out.println ("Parsing String, ch is " + ch);
         if (ch == '\\')
           {
-            if ((ch = this.jsonString.charAt (++this.i)) == '"')
+            if ((ch = curCharInc ()) == '"')
               {
                 stringOut += ch;
               } // if
@@ -187,6 +212,7 @@ public class JSONDecoder
             stringOut += ch;
           } // else
       } // while not end of key
+    System.out.println ("Returing string  " + stringOut);
     return stringOut;
   } // parseStringInner()
 
