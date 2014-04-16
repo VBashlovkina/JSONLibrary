@@ -25,7 +25,7 @@ public class JSONObject
     addKey (String keyIn)
   {
     this.keys.add (keyIn);
-    printKeys();
+    printKeys ();
     System.out.println ("Key added");
   } // addKey (String)
 
@@ -53,15 +53,15 @@ public class JSONObject
    * @param key
    * @return
    */
-  public JSONVal
+  public Object
     get (String keyIn)
   {
     for (int i = 0; i < this.keys.size (); i++)
       {
         if (this.keys.get (i).compareTo (keyIn) == 0)
           {
-            System.out.println("key found at " + i);
-            System.out.println(this.vals.get (i).toString());
+            System.out.println ("key found at " + i);
+            System.out.println (this.vals.get (i));
             return this.vals.get (i);
           } // if
       } // for
@@ -74,4 +74,11 @@ public class JSONObject
     // STUB
     return "";
   } // toString()
+
+  @Override
+  public Object
+    get ()
+  {
+    return "[Object]";
+  }
 }

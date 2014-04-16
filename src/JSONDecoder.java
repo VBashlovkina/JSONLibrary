@@ -75,6 +75,7 @@ public class JSONDecoder
       // If it's a number:
         case '0':
         case '1':
+        case '2':
         case '3':
         case '4':
         case '5':
@@ -83,6 +84,7 @@ public class JSONDecoder
         case '8':
         case '9':
         case '-': // for negative numbers
+          System.out.println ("Parsing a number! xxxxxxxxxxxxxxxxxxxxx");
           return parseNumber ();
           // If it's a string
         case '"':
@@ -90,6 +92,7 @@ public class JSONDecoder
           return parseString ();
           // Array
         case '[':
+          System.out.println ("Parsing array!");
           return parseArray ();
           // New object
         case '{':
@@ -163,7 +166,11 @@ public class JSONDecoder
         object.addVal (v); // this will recurse if objects are inside
         ch = currentChar (); // reset char to current
         System.out.println ("Added value, hash: " + v + ", next val: " + ch);
-        incChar ();
+
+        if (ch != '}' && ch != ',')
+          {
+            incChar ();
+          }
         trim ();
       } // do
     while (currentChar () == ',');
@@ -205,7 +212,11 @@ public class JSONDecoder
   public JSONBoolean
     parseBool ()
   {
-    return new JSONBoolean (curCharInc ());
+    char ch = currentChar ();
+    while (currentChar () != '}' && nextChar () != ',')
+      // scan past the boolean
+      ; // no Operation
+    return new JSONBoolean (ch);
   } // parseSpecial
 
   public JSONString
@@ -217,25 +228,33 @@ public class JSONDecoder
   public JSONArray
     parseArray ()
   {
-    // STUB
-    return null;
+    System.out.println ("Doing array, cur: " + currentChar ());
+    int startingIndex = this.i;
+    while (nextChar () != ']')
+      // move past array
+      ; // no operation
+
+    return new JSONArray (this.jsonString.substring (startingIndex, this.i));
   } // parseArray()
 
   public JSONNumber
     parseNumber ()
   {
+    System.out.println ("Number!");
     // As with string, go until reach a '"' and then get substring
     int startingIndex = this.i;
     char ch;
     boolean decimal = false;
-    while ((ch = nextChar ()) != '"')
+    while ((ch = currentChar ()) != ',')
       {
         if (ch == '.')
           {
             decimal = true; // contains a ., therefore is decimal
           } // if
+        ch = nextChar ();
       } // while
-
+    System.out.println ("Parsing number (" + decimal + "), "
+                        + this.jsonString.substring (startingIndex, this.i));
     return new JSONNumber (this.jsonString.substring (startingIndex, this.i),
                            decimal);
   } // parseNumber()
