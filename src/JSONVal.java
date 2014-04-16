@@ -1,16 +1,8 @@
-public class JSONVal
+interface JSONVal
 {
 
-  public JSONVal ()
-  {
-    // Silence?
-  } // JSONVal
-
   // return the type
-  public String
-    type ()
-  {
-    return "undefined";
-  }
-
+  public String toString();
+  
+  
 }

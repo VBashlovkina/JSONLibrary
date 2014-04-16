@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class JSONObject
-    extends
+    implements
       JSONVal
 {
   // Fields
@@ -25,7 +25,7 @@ public class JSONObject
     addKey (String keyIn)
   {
     this.keys.add (keyIn);
-    System.out.println("Key added");
+    System.out.println ("Key added");
   } // addKey (String)
 
   public void
