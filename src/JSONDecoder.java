@@ -1,23 +1,51 @@
 public class JSONDecoder
 {
   String jsonString;
-  int i = 0;
+  int i;
 
   // Constructor
   public JSONDecoder (String stringIn)
   {
+    this.i = 0;
     this.jsonString = stringIn;
-    
-    parseObject();
+
+    parseObject ();
   } // JSONDecoder ()
+
+  // Increments i before returning
+  public char
+    nextChar ()
+  {
+    return this.jsonString.charAt (--this.i);
+  } // nextChar
+
+  // Post: increments i after returning
+  public char
+    curCharInc ()
+  {
+    return this.jsonString.charAt (this.i++);
+  }
+
+  public char
+    currentChar ()
+  {
+    return this.jsonString.charAt (this.i);
+  } // currentChar
 
   /*
    * DECIPHER TYPE
    */
   public JSONVal
-    parseFromType ()
+    parseVal ()
   {
-    char ch = this.stringIn.charAt (this.i);
+    // Values are always preceeded by a colon.
+    if (curCharInc () != ':')
+      {
+        // Throw error.
+        return null;
+      } // if
+
+    char ch = currentChar ();
 
     /*
      * What are the basic types? According to json.org, they are:
@@ -64,21 +92,32 @@ public class JSONDecoder
   public JSONObject
     parseObject ()
   {
-    JSONObject object = new JSONObject();
+
     // make sure that the first char is a {
-    if (this.jsonString.charAt(this.i++) != '{'
-        || this.jsonString.charAt(this.i) == '}')
+    if (curCharInc () != '{' || currentChar () == '}')
       {
         return null;
       }
     // We have moved i once.
-    
-    // Get the key
-    String key = parseKey();
-    object.addKey(key);
-    
-    // STUB
-    return null;
+    JSONObject object = new JSONObject ();
+
+    /*
+     * JSON objects can have multiple key-value pairs per object. They are
+     * seperated by commas. Because of our case at the top, we know it's not
+     * null, so there must be at least one key-value pair. Moreover, we cannot
+     * check for a common before we parse the key-value pair, and therefore I
+     * will use a do-while loop (really!)
+     */
+    do
+      {
+        // Add the key
+        object.addKey (parseKey ());
+        // Add the value
+        object.addVal (parseVal ()); // this will recurse if objects are inside
+      }
+    while (curCharInc () == ',');
+
+    return object;
   } // parseObject
 
   public JSONObject
@@ -94,7 +133,7 @@ public class JSONDecoder
     // STUB
     return null;
 
-  }
+  } // parseFalse()
 
   public JSONObject
     parseNull ()
@@ -102,14 +141,13 @@ public class JSONDecoder
     // STUB
     return null;
 
-  }
+  } // parseNull()
 
   public JSONString
     parseString ()
   {
-    String output = "";
-
-    return new JSONString (output);
+    // The next bit is a string
+    return new JSONString (parseStringInner ());
   } // parseString ()
 
   public JSONArray
@@ -117,20 +155,20 @@ public class JSONDecoder
   {
     // STUB
     return null;
-  }
+  } // parseArray()
 
   public JSONNumber
     parseNumber ()
   {
     // STUB
     return null;
-  }
-  
+  } // parseNumber()
+
   /*
-   * PARSE KEY
+   * PARSE STRINGS WITHIN QUOTES (KEY AND JSONStrings)
    */
   public String
-    parseKey ()
+    parseStringInner ()
   {
     String stringOut = "";
     char ch;
@@ -140,7 +178,7 @@ public class JSONDecoder
           {
             if ((ch = this.jsonString.charAt (++this.i)) == '"')
               {
-              stringOut += ch;
+                stringOut += ch;
               } // if
           } // if
         else
@@ -149,6 +187,20 @@ public class JSONDecoder
             stringOut += ch;
           } // else
       } // while not end of key
-    return stringOut; // this is the key
+    return stringOut;
+  } // parseStringInner()
+
+  /*
+   * PARSE KEY Must only be called when the next peice is definitely a key
+   */
+  public String
+    parseKey ()
+  {
+    // Get the key
+    if (curCharInc () != '"')
+      {
+        // Throw an error. In JSON, the key has to be a string.
+      } // if
+    return parseStringInner (); // this is the key
   } // parseKey (String)
 }
