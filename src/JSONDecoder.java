@@ -167,9 +167,12 @@ public class JSONDecoder
   } // parseFalse()
 
   public JSONObject parseNull()
+  {
+    //STUB?
+    return null;
+  }
 
-  public JSONBoolean
-    parseBool ()
+  public JSONBoolean parseBool ()
   {
     return new JSONBoolean (curCharInc ());
   } // parseSpecial

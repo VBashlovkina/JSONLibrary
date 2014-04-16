@@ -7,7 +7,7 @@ public class JSONExpt
                         + " \"l\": \"R\" " + "}" + "}";
 
   public static void
-    main (String[] args)
+    main (String[] args) throws Exception
   {
     String simple = "{\"name\":\"Graeme\"}";
     String simple2 = "{\"name\":\"Graeme\",\"lastName\":\"Boy\"}";
