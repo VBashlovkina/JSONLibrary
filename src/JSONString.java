@@ -5,8 +5,8 @@ public class JSONString extends JSONVal
   
   
   // Constructors
-  public JSONString (String string)
+  public JSONString (String stringIn)
   {
-    this.string = string;
+    this.string = stringIn;
   } // JSONString
 }

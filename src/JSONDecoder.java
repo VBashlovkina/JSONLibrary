@@ -1,14 +1,23 @@
-public class JSONParse
+public class JSONDecoder
 {
-  String type;
+  String jsonString;
+  int i = 0;
+
+  // Constructor
+  public JSONDecoder (String stringIn)
+  {
+    this.jsonString = stringIn;
+    
+    parseObject();
+  } // JSONDecoder ()
 
   /*
    * DECIPHER TYPE
    */
   public JSONVal
-    decipherType (String stringIn)
+    parseFromType ()
   {
-    char ch = stringIn.charAt (i);
+    char ch = this.stringIn.charAt (this.i);
 
     /*
      * What are the basic types? According to json.org, they are:
@@ -55,6 +64,19 @@ public class JSONParse
   public JSONObject
     parseObject ()
   {
+    JSONObject object = new JSONObject();
+    // make sure that the first char is a {
+    if (this.jsonString.charAt(this.i++) != '{'
+        || this.jsonString.charAt(this.i) == '}')
+      {
+        return null;
+      }
+    // We have moved i once.
+    
+    // Get the key
+    String key = parseKey();
+    object.addKey(key);
+    
     // STUB
     return null;
   } // parseObject
@@ -64,7 +86,6 @@ public class JSONParse
   {
     // STUB
     return null;
-
   }
 
   public JSONObject
@@ -86,9 +107,10 @@ public class JSONParse
   public JSONString
     parseString ()
   {
-    // STUB
-    return null;
-  }
+    String output = "";
+
+    return new JSONString (output);
+  } // parseString ()
 
   public JSONArray
     parseArray ()
@@ -103,31 +125,30 @@ public class JSONParse
     // STUB
     return null;
   }
-
+  
   /*
    * PARSE KEY
    */
   public String
-    parseKey (String stringIn)
+    parseKey ()
   {
     String stringOut = "";
-    int stringLen = stringIn.length ();
     char ch;
-    i = 0;
-    while ((ch = stringIn.charAt (i)) != '"')
+    while ((ch = this.jsonString.charAt (this.i++)) != '"')
       {
         if (ch == '\\')
           {
-            // then skip the next
-            i++;
+            if ((ch = this.jsonString.charAt (++this.i)) == '"')
+              {
+              stringOut += ch;
+              } // if
           } // if
         else
           {
+            // Probably a valid part of a string. Add it.
             stringOut += ch;
-          }
-        i++; // move on to next char
+          } // else
       } // while not end of key
-
     return stringOut; // this is the key
   } // parseKey (String)
 }
