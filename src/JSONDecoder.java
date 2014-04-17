@@ -47,15 +47,22 @@ public class JSONDecoder
   } // jsonDecode()
 
   /**
-   * Translate a string into Java
+   * Translate a string of JSON code into Java
    * 
    * @throws Exception
-   * @pre DECIPHER TYPE
+   * @pre this.jsonString is a valid piece of JSON code
+   * @post the object represented by the string is returned
+   * @return null if the string is a JSON constant null
+   * @return JSONBoolean true or false if the string is a JSON constant true or false
+   * @return JSONString if JSON string
+   * @return JSONNumber if JSON number
+   * @return JSONArray if JSON array
+   * @return JSONObject if JSON object 
    */
   public JSONVal parseVal()
     throws Exception
   {
-    // Values are always preceeded by a colon.
+    // Values are always preceded by a colon.
 
     System.out.println("Parsing val, ch is " + currentChar());
 
@@ -127,25 +134,19 @@ public class JSONDecoder
     throws Exception
   {
 
-    // make sure that the first char is a {
-    System.out.println("Before caught, c " + currentChar());
-    // if (nextChar () == '}')
-    // {
-    // System.out.println ("Caught null!, current " + currentChar ());
-    // return null;
-    // }
-    // We have moved i once.
+    
     JSONObject object = new JSONObject();
 
     /*
      * JSON objects can have multiple key-value pairs per object. They are
-     * seperated by commas. Because of our case at the top, we know it's not
-     * null, so there must be at least one key-value pair. Moreover, we cannot
-     * check for a common before we parse the key-value pair, and therefore I
-     * will use a do-while loop (really!)
+     * separated by commas. We cannot
+     * check for a comma before we parse the key-value pair, and therefore we
+     * will use a do-while loop.
      */
+    
     // Number of keys for the JSONObject to be returned
     int numKeys = 0;
+    
     char ch;
     do
       {
@@ -155,18 +156,18 @@ public class JSONDecoder
           {
             incChar(); // move past ',' or '{'
             trim();
-          }
+          }//if comma or opening brace
         else if (currentChar() == '}')
           {
             return null;
-          }
+          }// if closing brace, must be a null object
 
         if (currentChar() == '"')
           {
             String k = parseKey();
             System.out.println("Adding key " + k);
             object.addKey(k);
-          }
+          }// if quote
 
         trim(); // after '"'
         numKeys++;
@@ -190,6 +191,11 @@ public class JSONDecoder
     return object;
   } // parseObject()
 
+  /**
+   * Parse a JSON boolean
+   * @pre the string represents a valid JSON constant true or false
+   * @return JSONBoolean
+   */
   public JSONBoolean parseBool()
   {
     char ch = currentChar();
@@ -197,13 +203,23 @@ public class JSONDecoder
       // scan past the boolean
       ; // no Operation
     return new JSONBoolean(ch);
-  } // parseSpecial
-
+  } // parseBool()
+  
+  /**
+   * Parse a JSON string
+   * @pre the string represents a valid JSON string
+   * @return JSONString
+   */
   public JSONString parseString()
   {
     return new JSONString(parseStringInner());
   } // parseString ()
-
+  
+  /**
+   * Parse a JSON array
+   * @pre the string represents a valid JSON array
+   * @return JSONArray
+   */
   public JSONArray parseArray()
   {
     System.out.println("Doing array, cur: " + currentChar());
@@ -214,7 +230,11 @@ public class JSONDecoder
 
     return new JSONArray(this.jsonString.substring(startingIndex, this.i));
   } // parseArray()
-
+  /**
+   * Parse a JSON number
+   * @pre the string represents a valid JSON number
+   * @return JSONNumber
+   */
   public JSONNumber parseNumber()
   {
     System.out.println("Number!");
@@ -289,7 +309,9 @@ public class JSONDecoder
   } // incChar()
 
   /**
-   * While there is whitespace ahead, increment char
+   * Trim whitespace from a string
+   * @pre none
+   * @post the current index is incremented past all whitespace
    */
   public void trim()
   {
@@ -297,7 +319,11 @@ public class JSONDecoder
     trimLines();
     trimSpace();
   } // trim ()
-
+/**
+ * Trim spaces
+ * @pre none
+ * @post the current index is incremented past all spaces
+ */
   public void trimSpace()
   {
     while (currentChar() == ' ')
@@ -305,8 +331,12 @@ public class JSONDecoder
         System.out.println("Removing whitespace");
         incChar();
       } // while
-  }
-
+  }//trimSpace()
+  /**
+   * Trim newlines
+   * @pre none
+   * @post the current index is incremented past all newlines
+   */
   public void trimLines()
   {
     while (currentChar() == '\n')
@@ -314,10 +344,12 @@ public class JSONDecoder
         System.out.println("Found newline");
         incChar();
       } // while
-  }
+  }//trimLines()
 
-  /*
-   * PARSE STRINGS WITHIN QUOTES (KEY AND JSONStrings)
+  /**
+   * Parse strings that are JSON strings or keys
+   * @pre the first char is not a quote
+   * @post the string is returned
    */
   public String parseStringInner()
   {
@@ -331,12 +363,15 @@ public class JSONDecoder
     return stringOut;
   } // parseStringInner()
 
-  /*
-   * PARSE KEY Must only be called when the next peice is definitely a key
+  /**
+   * Parse a key
+   * @pre the string must be a key
+   * @return the string that is the key
    */
   public String parseKey()
   {
     // Get the key
     return parseStringInner(); // this is the key
   } // parseKey (String)
-}
+  
+}// JSONDecode class
