@@ -33,5 +33,6 @@ public class JSONNumber
     toString ()
   {
     return number;
-  }
-}
+  }//toString()
+  
+}//JSONNumber class

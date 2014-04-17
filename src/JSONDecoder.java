@@ -241,7 +241,7 @@ public class JSONDecoder
     int startingIndex = this.i;
     char ch;
     boolean decimal = false;
-    while ((ch = currentChar()) != ',')
+    while (this.i < this.jsonString.length() -1 && (ch = currentChar()) != ',')
       {
         if (ch == '.')
           {
