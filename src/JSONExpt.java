@@ -40,9 +40,5 @@ public class JSONExpt
     
     System.out.println ("Has a cat? " + person.get ("hasCat?"));
 
-    // json.parse(test1.substring(1));
-    // json.parse(test1.substring(1));
-    // paradox
-    // json.parse(test1.substring(1, 47));
   } // main (String [])
 }

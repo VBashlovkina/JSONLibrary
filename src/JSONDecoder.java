@@ -38,7 +38,7 @@ public class JSONDecoder
    * Translate a JSON string to Java
    * 
    * @pre this.jsonString is a valid piece of JSON code
-   * @return JSONVal the object represented by the string
+   * @return JSONVal, the object represented by the string
    * @throws Exception 
    */
   public JSONVal jsonDecode() throws Exception
@@ -64,19 +64,18 @@ public class JSONDecoder
   {
     // Values are always preceded by a colon.
 
-    System.out.println("Parsing val, ch is " + currentChar());
-
-    incChar();
-    trim(); // after '"'
-    char ch;
-    System.out.println();
-    incChar(); // move past ':'
-    trim(); // after ':'
-    ch = currentChar();
-    System.out.println("Made it through");
-
-    System.out.println("Adding value, ch is " + ch);
-
+//    System.out.println("Parsing val, ch is " + currentChar());
+//    incChar();
+//    trim(); // after '"'
+//    char ch;
+//    System.out.println();
+//    incChar(); // move past ':'
+//    trim(); // after ':'
+//    ch = currentChar();
+//    System.out.println("Made it through");
+//    System.out.println("Adding value, ch is " + ch);
+    trim();
+    char ch = currentChar();
     /*
      * What are the basic types? According to json.org, they are:
      * 
@@ -199,7 +198,7 @@ public class JSONDecoder
   public JSONBoolean parseBool()
   {
     char ch = currentChar();
-    while (currentChar() != '}' && nextChar() != ',')
+    while (this.i < this.jsonString.length() -1 && currentChar() != '}' && nextChar() != ',')
       // scan past the boolean
       ; // no Operation
     return new JSONBoolean(ch);
