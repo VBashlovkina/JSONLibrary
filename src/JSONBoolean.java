@@ -1,4 +1,6 @@
-public class JSONBoolean implements JSONVal
+public class JSONBoolean
+    implements
+      JSONVal
 {
 
   boolean isTrue = false;
@@ -11,10 +13,16 @@ public class JSONBoolean implements JSONVal
       } // if
   } // JSONSpecial
 
-  public boolean
+  public Object
     get ()
   {
-    return isTrue;
+    return this.isTrue;
+  }
+
+  public String
+    toString ()
+  {
+    return String.valueOf (this.isTrue);
   }
 
 } // class JSONSpecial

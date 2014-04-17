@@ -20,4 +20,12 @@ public class JSONArray
   {
 
   } // addItems(String)
+
+  @Override
+  public Object
+    get ()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
 }

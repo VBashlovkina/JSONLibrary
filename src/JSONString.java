@@ -15,4 +15,11 @@ public class JSONString
   {
     return this.string;
   }
+
+  @Override
+  public Object
+    get ()
+  {
+    return this.string;
+  }
 }
